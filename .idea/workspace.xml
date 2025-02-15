@@ -1,39 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/goshop.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LC.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LC1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LC2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goshop.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goshop_orders.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goshop_orders_20250207.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goshop_orders_20250213.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gpt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gpt1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250214.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/products_list.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/rest-order.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales_pending.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales_rest.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250214.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/products_list.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/rest-order.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales_pending.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales_rest.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/v1.py" afterDir="false" />
+    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 1st commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,23 +15,37 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Samuel-ncu&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Samuel-ncu/goshopGUI.git&quot;,
+    &quot;accountId&quot;: &quot;59130f4e-68a8-4ef3-a98f-befd32c2f9f1&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2t4l8I836lOz0SF0Tlt5Zt1L21d" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/acer/PycharmProjects/goshop"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.GPT2.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/acer/PycharmProjects/goshop&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\acer\PycharmProjects\goshop" />
@@ -80,6 +67,15 @@
       <option name="presentableId" value="Default" />
       <updated>1739619066529</updated>
     </task>
+    <task id="LOCAL-00001" summary="Goshop 1st commit">
+      <option name="closed" value="true" />
+      <created>1739619523285</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739619523285</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -87,10 +83,26 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Goshop 1st commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Goshop 1st commit" />
   </component>
 </project>

@@ -1077,11 +1077,20 @@ class OrderScraperApp(QWidget):
         dialog.exec_()
 
 
-# ===============================
-# 主程式進入點
-# ===============================
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # 確保 QApplication 正確初始化
     window = OrderScraperApp()
     window.show()
-    sys.exit(app.exec_())
+
+
+    # 設定所有視窗置頂
+    def set_all_windows_on_top(app):
+        """讓所有 Qt UI 視窗保持在最上層"""
+        for widget in app.topLevelWidgets():
+            widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)
+            widget.show()  # 重新顯示以應用新設定
+
+
+    set_all_windows_on_top(app)  # 呼叫函式，讓所有 UI 都保持最前
+
+    sys.exit(app.exec_())  # 進入應用程式主迴圈
