@@ -189,10 +189,11 @@ class OrderProcessingDialog(QDialog):
             self.log(f"正在打開訂單 URL: {link_url}")
             if self.page:
                 self.page.goto(link_url)
-                time.sleep(random.uniform(1, 3))
+                # time.sleep(random.uniform(1, 3))
             self.order_label.setText(f"正在出貨: {product_name} - {attribute} - 數量: {quantity}")
         except Exception as e:
             self.log(f"打開訂單 URL 時出錯：{e}")
+            QMessageBox.information(self, f"打開訂單 URL 時出錯：{e}")
 
     def process_next_order(self):
         self.log(f"正在出貨: {self.order_label.text()}")
@@ -287,9 +288,37 @@ class OrderScraperApp(QWidget):
         self.process_orders_btn.clicked.connect(self.start_order_processing)
         layout.addWidget(self.process_orders_btn)
         '''
+        # 完全關閉 Playwright 按鈕
+        self.quit_button = QPushButton("完全關閉 Playwright")
+        self.quit_button.clicked.connect(self.close_playwright)
+        layout.addWidget(self.quit_button)
+
         self.sales_info_label = QLabel("銷售總合：尚無資料", self)
         self.sales_info_label.setAlignment(Qt.AlignLeft)
         layout.addWidget(self.sales_info_label)
+
+    def close_playwright(self):
+        """完全關閉 Playwright 並釋放所有資源"""
+        self.log("🔴 正在完全關閉 Playwright...")
+
+        try:
+            # 關閉瀏覽器
+            if self.browser:
+                self.browser.close()
+                self.browser = None
+                self.log("✅ 瀏覽器已關閉")
+
+            # 停止 Playwright
+            if self.playwright:
+                self.playwright.stop()
+                self.playwright = None
+                self.log("✅ Playwright 進程已完全停止")
+
+        except Exception as e:
+            self.log(f"❌ 退出 Playwright 時發生錯誤：{traceback.format_exc()}")
+
+        QMessageBox.information(self, "Playwright 已關閉", "Playwright 已完全關閉，您可以重新啟動它。")
+
 
     def disable_buttons(self):
         self.scrape_orders_btn.setEnabled(False)
@@ -429,12 +458,13 @@ class OrderScraperApp(QWidget):
         except Exception as e:
             self.log(f"啟動瀏覽器時出錯：{e}")
             return
-
+        sub_total = 0
         for idx, row in df_orders.iterrows():
             product_name = row["Product Name"]
             attribute = row["Attribute"]
             quantity = row["Quantity"]
             link_url = row["Product URL"]
+            sub_total += quantity
             total_quantity = df_orders["Quantity"].sum()
             try:
                 self.log(f"正在打開訂單 URL: {link_url}")
@@ -447,7 +477,7 @@ class OrderScraperApp(QWidget):
                 '''
                 msg_box = QMessageBox(self)
                 msg_box.setWindowTitle("出貨中")
-                msg_box.setText(f"第 {idx + 1}筆.共{len(df_orders)}筆 總計{total_quantity}件\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
+                msg_box.setText(f"第 {idx + 1}筆.共{len(df_orders)}筆 總計{total_quantity}件中第{sub_total}件\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
                 msg_box.addButton("下一筆", QMessageBox.AcceptRole)
                 msg_box.exec_()
             except Exception as e:
@@ -625,22 +655,29 @@ class OrderScraperApp(QWidget):
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
                 # 呼叫 split_and_merge_orders
                 print("split_and_merge_orders", df_pending)
+                user = self.user_combo.currentText()
                 split_df, merged_df = self.split_and_merge_orders(df_pending)
                 file_path = os.path.join(self.current_user_dir,
-                                         f"goshop_orders_{datetime.now().strftime('%Y%m%d')}.xlsx")
+                                         f"goshop_orders_{datetime.now().strftime('%Y%m%d')}_{user}.xlsx")
                 with pd.ExcelWriter(file_path) as writer:
                     df_pending.to_excel(writer, sheet_name="原始資料", index=False)
                     split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
                     merged_df.to_excel(writer, sheet_name="合併後資料", index=False)
                 self.log(f"訂單資料已存成 Excel 檔案：{file_path}")
+                if not df_pending.empty:
+                    first_order_code = str(df_pending["Order Code"].iloc[0]).strip()
+                    with open(lastorder_file, "w", encoding="utf-8") as f:
+                        f.write(first_order_code)
+                    self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
                 self.update_sales_file(df_pending)
             else:
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
                 df_rest = pd.DataFrame(rest_orders, columns=columns)
                 split_df, merged_df = self.split_and_merge_orders(df_pending)
+                user = self.user_combo.currentText()
                 file_path_pending = os.path.join(self.current_user_dir,
-                                                 f"goshop_orders_{datetime.now().strftime('%Y%m%d')}.xlsx")
-                file_path_rest = os.path.join(self.current_user_dir, "rest-order.xlsx")
+                                                 f"goshop_orders_{datetime.now().strftime('%Y%m%d')}_{user}.xlsx")
+                file_path_rest = os.path.join(self.current_user_dir, "rest-order_{user}.xlsx")
                 with pd.ExcelWriter(file_path_pending) as writer:
                     df_pending.to_excel(writer, sheet_name="原始資料", index=False)
                     split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
@@ -655,12 +692,13 @@ class OrderScraperApp(QWidget):
                 self.update_sales_file_split(df_pending, df_rest)
         except Exception as e:
             self.log(f"抓取資料時出錯：{traceback.format_exc()}")
+        '''    
         finally:
             if self.browser:
                 self.browser.close()
             if self.playwright:
                 self.playwright.stop()
-
+        '''
     def scrape_by_order_range(self):
         if not self.current_user_dir:
             self.log("請先選擇使用者。")
@@ -731,8 +769,8 @@ class OrderScraperApp(QWidget):
             ])
 
             split_df, merged_df = self.split_and_merge_orders(df_original)
-
-            file_path = os.path.join(self.current_user_dir, f"goshop_orders_{start_order}_to_{end_order}.xlsx")
+            user = self.user_combo.currentText()
+            file_path = os.path.join(self.current_user_dir, f"goshop_orders_{start_order}_to_{end_order}_{user}.xlsx")
             with pd.ExcelWriter(file_path) as writer:
                 df_original.to_excel(writer, sheet_name="原始資料", index=False)
                 split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
@@ -1048,12 +1086,13 @@ class OrderScraperApp(QWidget):
             self.log(f"產品資料已存成 Excel 檔案：{products_file}")
         except Exception as e:
             self.log(f"抓取產品資料時出錯：{traceback.format_exc()}")
+        '''
         finally:
             if self.browser:
                 self.browser.close()
             if self.playwright:
                 self.playwright.stop()
-
+        '''
     def update_product_url(self):
         if not self.current_user_dir:
             self.log("請先選擇使用者。")
