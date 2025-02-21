@@ -468,6 +468,7 @@ class OrderScraperApp(QWidget):
             total_quantity = df_orders["Quantity"].sum()
             try:
                 self.log(f"正在打開訂單 URL: {link_url}")
+                self.page.wait_for_load_state("networkidle")  # 等待網頁完全載入
                 self.page.goto(link_url)
                 time.sleep(random.uniform(1, 3))
                 self.log(f"正在出貨: {idx + 1}. {product_name} - {attribute} - 數量: {quantity}")
@@ -485,6 +486,7 @@ class OrderScraperApp(QWidget):
 
         # QMessageBox.information(self, "出貨完成", "所有訂單已成功完成出貨！")
         # 建立訊息框
+        ''''
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("確認出貨")
         msg_box.setText(message)
@@ -506,13 +508,41 @@ class OrderScraperApp(QWidget):
 
         # 顯示對話框並獲取結果
         msg_box.exec_()
-        self.log("所有訂單已成功完成出貨！")
-        """
+        '''
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("確認出貨")
+
+        # 構建顯示訂單資料的訊息
+        order_details = "\n".join([
+            f"產品名稱: {row['Product Name']}\n規格: {row['Attribute']}\n數量: {row['Quantity']}\n"
+            for _, row in df_orders.iterrows()
+        ])
+        msg_box.setText(f"{message}\n\n訂單詳細資料:\n{order_details}")
+
+        # 添加按鈕
+        yes_button = msg_box.addButton("是", QMessageBox.YesRole)
+        copy_button = QPushButton("Copy")
+
+        # 設定 Copy 按鈕點擊事件
+        def copy_to_clipboard():
+            clipboard = QApplication.clipboard()
+            clipboard.setText(f"{message}\n")
+
+        copy_button.clicked.connect(copy_to_clipboard)
+
+        # 將 Copy 按鈕加入訊息框
+        msg_box.addButton(copy_button, QMessageBox.ActionRole)
+
+        # 顯示對話框並獲取結果
+        msg_box.exec_()
+        QMessageBox.information(self, "完成", "所有訂單已成功完成出貨！")
+
         if self.browser:
             self.browser.close()
+            self.browser = None
         if self.playwright:
             self.playwright.stop()
-        """
+            self.playwright = None
 
     def select_and_ship_order(self):
         if not self.current_user_dir:
@@ -1084,15 +1114,18 @@ class OrderScraperApp(QWidget):
             products_file = os.path.join(self.current_user_dir, "products_list.xlsx")
             df_products.to_excel(products_file, index=False)
             self.log(f"產品資料已存成 Excel 檔案：{products_file}")
+            QMessageBox.information(self, "提示", "產品資料已存成 Excel 檔案,退出視窗。", QMessageBox.Ok)
         except Exception as e:
             self.log(f"抓取產品資料時出錯：{traceback.format_exc()}")
-        '''
+
         finally:
             if self.browser:
                 self.browser.close()
+                self.browser= None
             if self.playwright:
                 self.playwright.stop()
-        '''
+                self.playwright= None
+
     def update_product_url(self):
         if not self.current_user_dir:
             self.log("請先選擇使用者。")
