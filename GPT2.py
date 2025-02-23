@@ -480,35 +480,17 @@ class OrderScraperApp(QWidget):
                 msg_box.setWindowTitle("出貨中")
                 msg_box.setText(f"第 {idx + 1}筆.共{len(df_orders)}筆 總計{total_quantity}件中第{sub_total}件\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
                 msg_box.addButton("下一筆", QMessageBox.AcceptRole)
+                end_button = msg_box.addButton("結束", QMessageBox.RejectRole)
                 msg_box.exec_()
+
+                if msg_box.clickedButton() == end_button:
+                    break
             except Exception as e:
                 self.log(f"打開訂單 URL 時出錯：{e}")
 
         # QMessageBox.information(self, "出貨完成", "所有訂單已成功完成出貨！")
         # 建立訊息框
-        ''''
-        msg_box = QMessageBox(self)
-        msg_box.setWindowTitle("確認出貨")
-        msg_box.setText(message)
 
-        # 添加按鈕
-        yes_button = msg_box.addButton("是", QMessageBox.YesRole)
-        # no_button = msg_box.addButton("否", QMessageBox.NoRole)
-        copy_button = QPushButton("Copy")
-
-        # 設定 Copy 按鈕點擊事件
-        def copy_to_clipboard():
-            clipboard = QApplication.clipboard()
-            clipboard.setText(message)
-
-        copy_button.clicked.connect(copy_to_clipboard)
-
-        # 將 Copy 按鈕加入訊息框
-        msg_box.addButton(copy_button, QMessageBox.ActionRole)
-
-        # 顯示對話框並獲取結果
-        msg_box.exec_()
-        '''
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("確認出貨")
 
