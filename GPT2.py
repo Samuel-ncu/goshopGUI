@@ -13,7 +13,7 @@ import pandas as pd
 from datetime import datetime
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QTextEdit, QLabel, QMessageBox, QDialog,
-    QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QTableWidget, QTableWidgetItem, QHeaderView
+    QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QTableWidget, QTableWidgetItem, QHeaderView,QScrollArea
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from playwright.sync_api import sync_playwright
@@ -27,7 +27,8 @@ class DialogWindow(QWidget):
         """顯示 PyQt 對話框，等待使用者按下「確定」後才返回"""
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("等待確認")
-        msg_box.setText("請點擊確定以繼續執行 Playwright")
+        # msg_box.setText("請點擊確定以繼續執行 Playwright。")
+        msg_box.setText("請登入百寶倉後繼續。")
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.setWindowFlag(Qt.WindowStaysOnTopHint)
 
@@ -472,43 +473,19 @@ class OrderScraperApp(QWidget):
                 self.page.goto(link_url)
                 time.sleep(random.uniform(1, 3))
                 self.log(f"正在出貨: {idx + 1}. {product_name} - {attribute} - 數量: {quantity}")
-                '''
-                QMessageBox.information(self, "出貨中",
-                                      f"正在出貨\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
-                '''
                 msg_box = QMessageBox(self)
                 msg_box.setWindowTitle("出貨中")
                 msg_box.setText(f"第 {idx + 1}筆.共{len(df_orders)}筆 總計{total_quantity}件中第{sub_total}件\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
                 msg_box.addButton("下一筆", QMessageBox.AcceptRole)
+                exit_button = msg_box.addButton("離開", QMessageBox.RejectRole)
                 msg_box.exec_()
+
+                if msg_box.clickedButton() == exit_button:
+                    self.log("使用者選擇離開出貨流程。")
+                    break
             except Exception as e:
                 self.log(f"打開訂單 URL 時出錯：{e}")
 
-        # QMessageBox.information(self, "出貨完成", "所有訂單已成功完成出貨！")
-        # 建立訊息框
-        ''''
-        msg_box = QMessageBox(self)
-        msg_box.setWindowTitle("確認出貨")
-        msg_box.setText(message)
-
-        # 添加按鈕
-        yes_button = msg_box.addButton("是", QMessageBox.YesRole)
-        # no_button = msg_box.addButton("否", QMessageBox.NoRole)
-        copy_button = QPushButton("Copy")
-
-        # 設定 Copy 按鈕點擊事件
-        def copy_to_clipboard():
-            clipboard = QApplication.clipboard()
-            clipboard.setText(message)
-
-        copy_button.clicked.connect(copy_to_clipboard)
-
-        # 將 Copy 按鈕加入訊息框
-        msg_box.addButton(copy_button, QMessageBox.ActionRole)
-
-        # 顯示對話框並獲取結果
-        msg_box.exec_()
-        '''
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("確認出貨")
 
@@ -517,24 +494,41 @@ class OrderScraperApp(QWidget):
             f"產品名稱: {row['Product Name']}\n規格: {row['Attribute']}\n數量: {row['Quantity']}\n"
             for _, row in df_orders.iterrows()
         ])
-        msg_box.setText(f"{message}\n\n訂單詳細資料:\n{order_details}")
+        # msg_box.setText(f"{message}\n\n訂單詳細資料:\n{order_details}")
+        msg_box.setText(f"{message}共{total_quantity}件")
 
+        msg_box.setStyleSheet("QLabel{min-width: 900px; max-width: 900px; text-align: left;}")
         # 添加按鈕
         yes_button = msg_box.addButton("是", QMessageBox.YesRole)
         copy_button = QPushButton("Copy")
-
         # 設定 Copy 按鈕點擊事件
         def copy_to_clipboard():
             clipboard = QApplication.clipboard()
-            clipboard.setText(f"{message}\n")
+            clipboard.setText(f"{message}")
 
-        copy_button.clicked.connect(copy_to_clipboard)
-
+        copy_button.clicked.connect(lambda: copy_to_clipboard())
         # 將 Copy 按鈕加入訊息框
         msg_box.addButton(copy_button, QMessageBox.ActionRole)
+        msg_box.setWindowTitle("確認出貨")
+        # 添加訂單詳細資料的滾動列表
+        scroll_area = QScrollArea()
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout()
+        scroll_widget.setLayout(scroll_layout)
+        scroll_area.setWidget(scroll_widget)
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFixedWidth(900)
+
+        order_details_label = QLabel(f"訂單詳細資料:\n{order_details}")
+        order_details_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        scroll_layout.addWidget(order_details_label)
+
+        msg_box.layout().addWidget(scroll_area)
+        # msg_box.resize(800, msg_box.sizeHint().height())
 
         # 顯示對話框並獲取結果
         msg_box.exec_()
+
         QMessageBox.information(self, "完成", "所有訂單已成功完成出貨！")
 
         if self.browser:
