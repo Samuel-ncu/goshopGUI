@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 5st commit&#10;&#10;Windows always stay on Top">
+    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 6st commit&#10;&#10;Windows always stay on Top">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +106,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740127591581</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Goshop 6st commit&#10;&#10;Windows always stay on Top">
+      <option name="closed" value="true" />
+      <created>1740229881570</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740229881570</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,6 +145,7 @@
     <MESSAGE value="Goshop 2st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 4st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 5st commit&#10;&#10;Windows always stay on Top" />
-    <option name="LAST_COMMIT_MESSAGE" value="Goshop 5st commit&#10;&#10;Windows always stay on Top" />
+    <MESSAGE value="Goshop 6st commit&#10;&#10;Windows always stay on Top" />
+    <option name="LAST_COMMIT_MESSAGE" value="Goshop 6st commit&#10;&#10;Windows always stay on Top" />
   </component>
 </project>

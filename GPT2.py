@@ -499,17 +499,28 @@ class OrderScraperApp(QWidget):
 
         msg_box.setStyleSheet("QLabel{min-width: 900px; max-width: 900px; text-align: left;}")
         # 添加按鈕
-        yes_button = msg_box.addButton("是", QMessageBox.YesRole)
+        # yes_button = msg_box.addButton("是", QMessageBox.YesRole)
+
         copy_button = QPushButton("Copy")
         # 設定 Copy 按鈕點擊事件
         def copy_to_clipboard():
             clipboard = QApplication.clipboard()
             clipboard.setText(f"{message}")
+            # 顯示確認訊息，要求按 OK
+            confirm_box = QMessageBox()
+            confirm_box.setWindowTitle("已複製")
+            confirm_box.setText("內容已複製到剪貼簿。")
+            confirm_box.setStandardButtons(QMessageBox.Ok)
+            confirm_box.setModal(False)  # 設定為非模態
+            confirm_box.show()  # 使用 show() 避免影響 msg_box
 
-        copy_button.clicked.connect(lambda: copy_to_clipboard())
-        # 將 Copy 按鈕加入訊息框
         msg_box.addButton(copy_button, QMessageBox.ActionRole)
+        copy_button.clicked.connect(copy_to_clipboard)
+        # 將 Copy 按鈕加入訊息框
+        msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.setWindowTitle("確認出貨")
+
+
         # 添加訂單詳細資料的滾動列表
         scroll_area = QScrollArea()
         scroll_widget = QWidget()
@@ -528,6 +539,7 @@ class OrderScraperApp(QWidget):
 
         # 顯示對話框並獲取結果
         msg_box.exec_()
+
 
         QMessageBox.information(self, "完成", "所有訂單已成功完成出貨！")
 
@@ -687,12 +699,14 @@ class OrderScraperApp(QWidget):
                     df_pending.to_excel(writer, sheet_name="原始資料", index=False)
                     split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
                     merged_df.to_excel(writer, sheet_name="合併後資料", index=False)
+                msg_text = f"訂單資料已存成 Excel 檔案：{file_path}\n"
                 self.log(f"訂單資料已存成 Excel 檔案：{file_path}")
                 if not df_pending.empty:
                     first_order_code = str(df_pending["Order Code"].iloc[0]).strip()
                     with open(lastorder_file, "w", encoding="utf-8") as f:
                         f.write(first_order_code)
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
+                    msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
                 self.update_sales_file(df_pending)
             else:
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
@@ -701,28 +715,42 @@ class OrderScraperApp(QWidget):
                 user = self.user_combo.currentText()
                 file_path_pending = os.path.join(self.current_user_dir,
                                                  f"goshop_orders_{datetime.now().strftime('%Y%m%d')}_{user}.xlsx")
-                file_path_rest = os.path.join(self.current_user_dir, "rest-order_{user}.xlsx")
+                file_path_rest = os.path.join(self.current_user_dir, "goshop_orders_rest_{user}.xlsx")
                 with pd.ExcelWriter(file_path_pending) as writer:
                     df_pending.to_excel(writer, sheet_name="原始資料", index=False)
                     split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
                     merged_df.to_excel(writer, sheet_name="合併後資料", index=False)
                 df_rest.to_excel(file_path_rest, index=False)
+                msg_text = f"訂單資料已分別存成 Excel 檔案：{file_path_pending} (Pending) 與 {file_path_rest} (Rest)\n"
                 self.log(f"訂單資料已分別存成 Excel 檔案：{file_path_pending} (Pending) 與 {file_path_rest} (Rest)")
                 if not df_pending.empty:
                     first_order_code = str(df_pending["Order Code"].iloc[0]).strip()
                     with open(lastorder_file, "w", encoding="utf-8") as f:
                         f.write(first_order_code)
+                    msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
-                self.update_sales_file_split(df_pending, df_rest)
+                total_amount_pending, total_service_charge_pending, total_final_price_pending, total_amount_rest, total_service_charge_rest, total_final_price_rest=self.update_sales_file_split(df_pending, df_rest)
         except Exception as e:
             self.log(f"抓取資料時出錯：{traceback.format_exc()}")
-        '''    
+            QMessageBox.critical(self, "錯誤", f"抓取資料時出錯：{traceback.format_exc()}")
+
         finally:
+            # 顯示銷售總合的訊息框
+            print("Hello 1")
+            msg_box = QMessageBox(self)
+            msg_box.setWindowTitle("銷售總合")
+            msg_text += f"\n銷售總合：{total_amount_pending:.2f} (Pending) 與 {total_amount_rest:.2f} (Rest)"
+            msg_box.setText(msg_text)
+            msg_box.setStandardButtons(QMessageBox.Ok)
+            msg_box.setStyleSheet("QLabel{min-width: 800px; max-width: 800px; text-align: left;}")
+            msg_box.exec_()
             if self.browser:
                 self.browser.close()
+                self.browser = None
             if self.playwright:
                 self.playwright.stop()
-        '''
+                self.playwright = None
+
     def scrape_by_order_range(self):
         if not self.current_user_dir:
             self.log("請先選擇使用者。")
@@ -881,6 +909,7 @@ class OrderScraperApp(QWidget):
                 f"銷售總合 (Pending) -> Amount: {total_amount_pending:.2f}, Service charge: {total_service_charge_pending:.2f}, Final price: {total_final_price_pending:.2f}")
             self.log(
                 f"銷售總合 (Rest) -> Amount: {total_amount_rest:.2f}, Service charge: {total_service_charge_rest:.2f}, Final price: {total_final_price_rest:.2f}")
+            return total_amount_pending, total_service_charge_pending, total_final_price_pending, total_amount_rest, total_service_charge_rest, total_final_price_rest
         except Exception as e:
             self.log(f"更新銷售檔案時出錯：{traceback.format_exc()}")
 
@@ -1108,6 +1137,7 @@ class OrderScraperApp(QWidget):
             products_file = os.path.join(self.current_user_dir, "products_list.xlsx")
             df_products.to_excel(products_file, index=False)
             self.log(f"產品資料已存成 Excel 檔案：{products_file}")
+            print("Samuel")
             QMessageBox.information(self, "提示", "產品資料已存成 Excel 檔案,退出視窗。", QMessageBox.Ok)
         except Exception as e:
             self.log(f"抓取產品資料時出錯：{traceback.format_exc()}")
