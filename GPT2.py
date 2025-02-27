@@ -208,6 +208,62 @@ class OrderProcessingDialog(QDialog):
     def log(self, message):
         print(message)
 
+class ShippingDialog(QDialog):
+    def __init__(self, message, order_details, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("確認出貨")
+        self.setMinimumSize(600, 400)
+        self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.setGeometry(0, 100, 600, 400)  # 設定對話框位置在螢幕左側
+        self.message = message
+
+        # 主佈局
+        layout = QVBoxLayout(self)
+
+        # 提示訊息
+        lbl_message = QLabel("確認要出貨嗎？")
+        layout.addWidget(lbl_message)
+
+        # 顯示 self.message 的區塊
+        message_label = QLabel(f"訊息:\n{self.message}")
+        message_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        layout.addWidget(message_label)
+        # 滾動區域（保持原有代碼）
+        scroll_area = QScrollArea()
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+        order_details_label = QLabel(f"訂單詳細資料:\n{order_details}")
+        order_details_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        scroll_layout.addWidget(order_details_label)
+        scroll_area.setWidget(scroll_widget)
+        scroll_area.setWidgetResizable(True)
+        layout.addWidget(scroll_area)
+
+        # 按鈕區域
+        btn_layout = QHBoxLayout()
+        print(self.message)
+
+        # Copy 按鈕
+        self.copy_btn = QPushButton("Copy")
+        self.copy_btn.clicked.connect(self.on_copy)
+        btn_layout.addWidget(self.copy_btn)
+
+        # OK 按鈕
+        self.ok_btn = QPushButton("OK")
+        self.ok_btn.clicked.connect(self.accept)  # 觸發 accept() 關閉對話框
+        btn_layout.addWidget(self.ok_btn)
+
+        layout.addLayout(btn_layout)
+
+    def on_copy(self):
+        """複製內容到剪貼簿且不關閉對話框"""
+        print(self.message)
+        clipboard = QApplication.clipboard()
+        clipboard.setText(self.message)  # 替換為實際內容
+        # 可選：添加複製成功提示
+        self.copy_btn.setText("已複製！")
+        QApplication.processEvents()  # 立即更新按鈕文字
+
 
 # ===============================
 # 主應用程式
@@ -406,9 +462,7 @@ class OrderScraperApp(QWidget):
         if reply == QMessageBox.Yes:
             self.start_shipping_process(df_orders,[first_order_code,last_order_code,length_of_order_code_list])  # 直接傳遞 df_orders
     '''
-    from PyQt5.QtWidgets import QMessageBox, QPushButton, QApplication
-    from PyQt5.QtGui import QClipboard
-    from PyQt5.QtWidgets import QMessageBox, QApplication
+
 
     def show_order_confirmation_dialog(self, df_orders, order_code_list):
         first_order_code = order_code_list[0] if order_code_list else "N/A"
@@ -443,6 +497,7 @@ class OrderScraperApp(QWidget):
             self.browser = self.playwright.chromium.launch(channel="msedge", headless=False)
             context = self.browser.new_context()
             self.page = context.new_page()
+
             self.page.goto("https://baibaoshop.com/")
             self.page.mouse.move(random.randint(0, 1000), random.randint(0, 1000))
             time.sleep(random.uniform(1, 3))
@@ -491,7 +546,7 @@ class OrderScraperApp(QWidget):
 
         # 構建顯示訂單資料的訊息
         order_details = "\n".join([
-            f"產品名稱: {row['Product Name']}\n規格: {row['Attribute']}\n數量: {row['Quantity']}\n"
+            f"{idx + 1}.產品名稱: {row['Product Name']}\n規格: {row['Attribute']}\n數量: {row['Quantity']}\n"
             for _, row in df_orders.iterrows()
         ])
         # msg_box.setText(f"{message}\n\n訂單詳細資料:\n{order_details}")
@@ -500,7 +555,7 @@ class OrderScraperApp(QWidget):
         msg_box.setStyleSheet("QLabel{min-width: 900px; max-width: 900px; text-align: left;}")
         # 添加按鈕
         # yes_button = msg_box.addButton("是", QMessageBox.YesRole)
-
+        '''
         copy_button = QPushButton("Copy")
         # 設定 Copy 按鈕點擊事件
         def copy_to_clipboard():
@@ -542,6 +597,14 @@ class OrderScraperApp(QWidget):
 
 
         QMessageBox.information(self, "完成", "所有訂單已成功完成出貨！")
+        '''
+
+
+        dialog = ShippingDialog(message, order_details)
+        if dialog.exec_() == QDialog.Accepted:
+            print("用戶點擊了OK")
+        else:
+            print("對話框關閉")
 
         if self.browser:
             self.browser.close()
@@ -599,6 +662,7 @@ class OrderScraperApp(QWidget):
             context = self.browser.new_context()
             self.page = context.new_page()
             self.page.goto("https://goshophsn.com/users/login")
+
             self.log(
                 "請在新開啟的瀏覽器中手動登入 Goshophsn。\n登入完成後，返回此視窗並點擊【抓取訂單】、【更新產品資料】或【更新產品URL】。")
         except Exception as e:
@@ -619,6 +683,7 @@ class OrderScraperApp(QWidget):
 
         if not self.page:
             self.log("請先啟動瀏覽器並手動登入。")
+            QMessageBox.information(self, "提示", "請先啟動瀏覽器並手動登入。")
             return
 
         stop_order_code = None
@@ -736,14 +801,14 @@ class OrderScraperApp(QWidget):
 
         finally:
             # 顯示銷售總合的訊息框
-            print("Hello 1")
+
             msg_box = QMessageBox(self)
             msg_box.setWindowTitle("銷售總合")
             msg_text += f"\n銷售總合：{total_amount_pending:.2f} (Pending) 與 {total_amount_rest:.2f} (Rest)"
             msg_box.setText(msg_text)
             msg_box.setStandardButtons(QMessageBox.Ok)
             msg_box.setStyleSheet("QLabel{min-width: 800px; max-width: 800px; text-align: left;}")
-            msg_box.exec_()
+            msg_box.exec()
             if self.browser:
                 self.browser.close()
                 self.browser = None
@@ -857,6 +922,10 @@ class OrderScraperApp(QWidget):
             self.log(f"已更新或建立 {sales_file} 檔案。")
             self.log(
                 f"銷售總合 -> Amount: {total_amount:.2f}, Service charge: {total_service_charge:.2f}, Final price: {total_final_price:.2f}")
+
+            QMessageBox.information(self, "銷售總合",
+                                    f"Amount: {total_amount:.2f}\n Service charge: {total_service_charge:.2f}\n Final price: {total_final_price:.2f}")
+
         except Exception as e:
             self.log(f"更新銷售檔案時出錯：{traceback.format_exc()}")
 

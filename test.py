@@ -9,6 +9,7 @@ class ShippingDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("確認出貨")
         self.setMinimumSize(600, 400)
+        self.setWindowFlag(Qt.WindowStaysOnTopHint)
 
         # 主佈局
         layout = QVBoxLayout(self)
