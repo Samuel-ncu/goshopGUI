@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 8st commit&#10;&#10;Windows always stay on Top">
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250227_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/~$goshop_orders_20250227_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250227_samuel-tw@outlook.com.xlsx" afterDir="false" />
+    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 7st commit&#10;&#10;Windows always stay on Top">
+      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250228_liusming@hotmail.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250301_liusming@hotmail.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250302_liusming@hotmail.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250228_samuel-tw@outlook.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250301_samuel-tw@outlook.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250302_samuel-tw@outlook.com.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +36,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Samuel-ncu/goshopGUI&quot;,
-    &quot;accountId&quot;: &quot;c98ad60d-3592-4ab1-b300-eaa27f28dd9a&quot;
+    &quot;url&quot;: &quot;https://github.com/Samuel-ncu/goshopGUI.git&quot;,
+    &quot;accountId&quot;: &quot;59130f4e-68a8-4ef3-a98f-befd32c2f9f1&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -46,16 +49,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.GPT2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/acer/PycharmProjects/goshop&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.GPT2.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "8af6832a",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/acer/PycharmProjects/goshop",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\acer\PycharmProjects\goshop" />
@@ -64,7 +68,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
+        <option value="bundled-python-sdk-337b0a7a993a-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.19416.19" />
       </set>
     </attachedChunks>
   </component>

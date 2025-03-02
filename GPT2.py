@@ -446,22 +446,6 @@ class OrderScraperApp(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "錯誤", f"出貨流程發生錯誤: {traceback.format_exc()}")
-    '''
-    def show_order_confirmation_dialog(self, df_orders, order_code_list):
-        first_order_code = order_code_list[0] if order_code_list else None
-        last_order_code = order_code_list[-1] if order_code_list else None
-        length_of_order_code_list = len(order_code_list)
-        # 正確的 QMessageBox 語法
-        reply = QMessageBox.question(
-            self,
-            "確認出貨",  # 訊息框標題
-            f" {first_order_code} 到 {last_order_code} 共 {length_of_order_code_list} 筆訂單!!\n\n是否開始出貨？",
-            QMessageBox.Yes | QMessageBox.No
-        )
-
-        if reply == QMessageBox.Yes:
-            self.start_shipping_process(df_orders,[first_order_code,last_order_code,length_of_order_code_list])  # 直接傳遞 df_orders
-    '''
 
 
     def show_order_confirmation_dialog(self, df_orders, order_code_list):
@@ -550,55 +534,12 @@ class OrderScraperApp(QWidget):
             for _, row in df_orders.iterrows()
         ])
         # msg_box.setText(f"{message}\n\n訂單詳細資料:\n{order_details}")
-        msg_box.setText(f"{message}共{total_quantity}件")
+        message = f"{message}共{total_quantity}件"
+        msg_box.setText(message)
 
         msg_box.setStyleSheet("QLabel{min-width: 900px; max-width: 900px; text-align: left;}")
         # 添加按鈕
         # yes_button = msg_box.addButton("是", QMessageBox.YesRole)
-        '''
-        copy_button = QPushButton("Copy")
-        # 設定 Copy 按鈕點擊事件
-        def copy_to_clipboard():
-            clipboard = QApplication.clipboard()
-            clipboard.setText(f"{message}")
-            # 顯示確認訊息，要求按 OK
-            confirm_box = QMessageBox()
-            confirm_box.setWindowTitle("已複製")
-            confirm_box.setText("內容已複製到剪貼簿。")
-            confirm_box.setStandardButtons(QMessageBox.Ok)
-            confirm_box.setModal(False)  # 設定為非模態
-            confirm_box.show()  # 使用 show() 避免影響 msg_box
-
-        msg_box.addButton(copy_button, QMessageBox.ActionRole)
-        copy_button.clicked.connect(copy_to_clipboard)
-        # 將 Copy 按鈕加入訊息框
-        msg_box.setStandardButtons(QMessageBox.Ok)
-        msg_box.setWindowTitle("確認出貨")
-
-
-        # 添加訂單詳細資料的滾動列表
-        scroll_area = QScrollArea()
-        scroll_widget = QWidget()
-        scroll_layout = QVBoxLayout()
-        scroll_widget.setLayout(scroll_layout)
-        scroll_area.setWidget(scroll_widget)
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setFixedWidth(900)
-
-        order_details_label = QLabel(f"訂單詳細資料:\n{order_details}")
-        order_details_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
-        scroll_layout.addWidget(order_details_label)
-
-        msg_box.layout().addWidget(scroll_area)
-        # msg_box.resize(800, msg_box.sizeHint().height())
-
-        # 顯示對話框並獲取結果
-        msg_box.exec_()
-
-
-        QMessageBox.information(self, "完成", "所有訂單已成功完成出貨！")
-        '''
-
 
         dialog = ShippingDialog(message, order_details)
         if dialog.exec_() == QDialog.Accepted:
@@ -772,7 +713,7 @@ class OrderScraperApp(QWidget):
                         f.write(first_order_code)
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
                     msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
-                self.update_sales_file(df_pending)
+                    self.update_sales_file(df_pending)
             else:
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
                 df_rest = pd.DataFrame(rest_orders, columns=columns)
@@ -794,21 +735,22 @@ class OrderScraperApp(QWidget):
                         f.write(first_order_code)
                     msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
-                total_amount_pending, total_service_charge_pending, total_final_price_pending, total_amount_rest, total_service_charge_rest, total_final_price_rest=self.update_sales_file_split(df_pending, df_rest)
+                    total_amount_pending, total_service_charge_pending, total_final_price_pending, total_amount_rest, total_service_charge_rest, total_final_price_rest=self.update_sales_file_split(df_pending, df_rest)
         except Exception as e:
             self.log(f"抓取資料時出錯：{traceback.format_exc()}")
             QMessageBox.critical(self, "錯誤", f"抓取資料時出錯：{traceback.format_exc()}")
 
         finally:
             # 顯示銷售總合的訊息框
-
+            '''
             msg_box = QMessageBox(self)
             msg_box.setWindowTitle("銷售總合")
             msg_text += f"\n銷售總合：{total_amount_pending:.2f} (Pending) 與 {total_amount_rest:.2f} (Rest)"
             msg_box.setText(msg_text)
             msg_box.setStandardButtons(QMessageBox.Ok)
             msg_box.setStyleSheet("QLabel{min-width: 800px; max-width: 800px; text-align: left;}")
-            msg_box.exec()
+            msg_box.exec_()
+            '''
             if self.browser:
                 self.browser.close()
                 self.browser = None
@@ -923,8 +865,7 @@ class OrderScraperApp(QWidget):
             self.log(
                 f"銷售總合 -> Amount: {total_amount:.2f}, Service charge: {total_service_charge:.2f}, Final price: {total_final_price:.2f}")
 
-            QMessageBox.information(self, "銷售總合",
-                                    f"Amount: {total_amount:.2f}\n Service charge: {total_service_charge:.2f}\n Final price: {total_final_price:.2f}")
+            QMessageBox.information(self, "銷售總合",f"Amount: {total_amount:.2f}\n Service charge: {total_service_charge:.2f}\n Final price: {total_final_price:.2f}", QMessageBox.Ok)
 
         except Exception as e:
             self.log(f"更新銷售檔案時出錯：{traceback.format_exc()}")
