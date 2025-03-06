@@ -23,12 +23,13 @@ class DialogWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-    def show_dialog(self):
+    def show_dialog(self, user):
         """顯示 PyQt 對話框，等待使用者按下「確定」後才返回"""
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("等待確認")
         # msg_box.setText("請點擊確定以繼續執行 Playwright。")
-        msg_box.setText("請登入百寶倉後繼續。")
+        # user = self.user_combo.currentText()
+        msg_box.setText(f"{user}\n請登入百寶倉後繼續。")
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.setWindowFlag(Qt.WindowStaysOnTopHint)
 
@@ -474,7 +475,8 @@ class OrderScraperApp(QWidget):
 
     def start_shipping_process(self, df_orders, message):
         dialog = DialogWindow()
-        QMessageBox.information(self, "開始出貨", "即將進入逐筆出貨流程，請稍候...")
+        user = self.user_combo.currentText()
+        # QMessageBox.information(self, "開始出貨", f"{user}\n即將進入逐筆出貨流程，請稍候...")
         try:
             self.log("正在啟動瀏覽器並導航到登錄頁面...")
             self.playwright = sync_playwright().start()
@@ -492,7 +494,7 @@ class OrderScraperApp(QWidget):
             print("等待使用者點擊 PyQt 對話框...")
 
             # 顯示 PyQt5 對話框
-            dialog.show_dialog()
+            dialog.show_dialog(user)
 
             print("使用者已確認，繼續執行 Playwright")
         except Exception as e:

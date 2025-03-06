@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 7st commit&#10;&#10;Windows always stay on Top">
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250228_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250301_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250302_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250228_samuel-tw@outlook.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250301_samuel-tw@outlook.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250302_samuel-tw@outlook.com.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250303_liusming@hotmail.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250305_liusming@hotmail.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250303_samuel-tw@outlook.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250305_samuel-tw@outlook.com.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250306_samuel-tw@outlook.com.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
@@ -25,6 +23,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dc9f774c251001e0a6468ac1642133f5a3713c31" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
@@ -54,7 +57,7 @@
     "Python.GPT2.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "8af6832a",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/acer/PycharmProjects/goshop",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
@@ -143,7 +146,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -162,6 +165,18 @@
     <MESSAGE value="Goshop 5st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 6st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 8st commit&#10;&#10;Windows always stay on Top" />
-    <option name="LAST_COMMIT_MESSAGE" value="Goshop 8st commit&#10;&#10;Windows always stay on Top" />
+    <MESSAGE value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
+    <option name="LAST_COMMIT_MESSAGE" value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GPT2.py</url>
+          <line>412</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
