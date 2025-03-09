@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 7st commit&#10;&#10;Windows always stay on Top">
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250303_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250305_liusming@hotmail.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250303_samuel-tw@outlook.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250305_samuel-tw@outlook.com.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250306_samuel-tw@outlook.com.xlsx" afterDir="false" />
+    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 11st Commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/products_list.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/products_list.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" afterDir="false" />
@@ -21,6 +16,11 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -52,17 +52,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.GPT2.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/acer/PycharmProjects/goshop",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.GPT2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/acer/PycharmProjects/goshop&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\acer\PycharmProjects\goshop" />
@@ -132,7 +132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740624602833</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Goshop 11st Commit">
+      <option name="closed" value="true" />
+      <created>1741269012978</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1741269012978</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -146,7 +154,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -166,7 +174,8 @@
     <MESSAGE value="Goshop 6st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 8st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
-    <option name="LAST_COMMIT_MESSAGE" value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
+    <MESSAGE value="Goshop 11st Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Goshop 11st Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
