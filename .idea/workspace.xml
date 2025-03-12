@@ -5,22 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 11st Commit">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/goshop_orders_20250309_liusming@hotmail.com.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/lastorder.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/products_list.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/products_list.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/liusming@hotmail.com/sales.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/goshop_orders_20250309_samuel-tw@outlook.com.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/lastorder.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/products_list.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/samuel-tw@outlook.com/sales.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="ChangesViewManager">
-    <option name="groupingKeys">
-      <option value="directory" />
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -39,8 +39,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Samuel-ncu/goshopGUI.git&quot;,
-    &quot;accountId&quot;: &quot;59130f4e-68a8-4ef3-a98f-befd32c2f9f1&quot;
+    &quot;url&quot;: &quot;https://github.com/Samuel-ncu/goshopGUI&quot;,
+    &quot;accountId&quot;: &quot;c98ad60d-3592-4ab1-b300-eaa27f28dd9a&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -71,7 +71,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-337b0a7a993a-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.19416.19" />
+        <option value="bundled-python-sdk-6a3326d57233-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.24807.21" />
       </set>
     </attachedChunks>
   </component>
@@ -132,15 +132,7 @@
       <option name="project" value="LOCAL" />
       <updated>1740624602833</updated>
     </task>
-    <task id="LOCAL-00007" summary="Goshop 11st Commit">
-      <option name="closed" value="true" />
-      <created>1741269012978</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1741269012978</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,7 +146,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -174,16 +166,20 @@
     <MESSAGE value="Goshop 6st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 8st commit&#10;&#10;Windows always stay on Top" />
     <MESSAGE value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
-    <MESSAGE value="Goshop 11st Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Goshop 11st Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Goshop 7st commit&#10;&#10;Windows always stay on Top" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/GPT2.py</url>
-          <line>412</line>
+          <line>466</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GPT2.py</url>
+          <line>967</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

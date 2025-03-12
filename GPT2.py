@@ -16,8 +16,13 @@ from PyQt5.QtWidgets import (
     QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QTableWidget, QTableWidgetItem, QHeaderView,QScrollArea
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from numpy.ma.core import minimum
 from playwright.sync_api import sync_playwright
 from PyQt5.QtGui import QClipboard
+from PyQt5.QtCore import Qt, QUrl
+from PyQt5.QtGui import QColor, QFont,  QDesktopServices,  QDoubleValidator
+# from PyQt5.QtWidgets import QDesktopServices
+
 
 class DialogWindow(QWidget):
     def __init__(self):
@@ -115,20 +120,41 @@ class UpdateProductURLDialog(QDialog):
     def initUI(self):
         layout = QVBoxLayout()
         self.table = QTableWidget(self)
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["產品名稱", "URL"])
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["產品名稱", "URL", "進貨價", "操作"])
+        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.table.setColumnWidth(0, 250)  # 調整 "操作" 欄的寬度
+        self.table.setColumnWidth(1, 300)  # 調整 "操作" 欄的寬度
+        self.table.setColumnWidth(2, 100)  # 調整 "操作" 欄的寬度
+        # self.table.setColumnWidth(3, 40)  # 調整 "操作" 欄的寬度
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        self.table.horizontalHeader().setStretchLastSection(True)
         self.table.setRowCount(len(self.df_products))
 
         for row in range(len(self.df_products)):
             product_name = str(self.df_products.iloc[row].get("Name", ""))
             url = str(self.df_products.iloc[row].get("url", ""))
+            unit_price = str(self.df_products.iloc[row].get("進貨價", "0"))
+
             name_item = QTableWidgetItem(product_name)
             name_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            name_item.setToolTip(product_name)
             self.table.setItem(row, 0, name_item)
+
             url_item = QTableWidgetItem(url)
-            url_item.setFlags(Qt.ItemIsEditable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            url_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            url_item.setToolTip(url)
             self.table.setItem(row, 1, url_item)
+
+            price_item = QLineEdit()
+            price_item .setAlignment(Qt.AlignRight)  # Align text to the center
+            price_item.setValidator(QDoubleValidator(0.99, 99.99, 2))
+            price_item.setText(str(unit_price))  # Set the initial value
+            self.table.setCellWidget(row, 2, price_item)
+            self.table.setItem(row, 1, QTableWidgetItem(str(self.df_products.iloc[row].get("url", ""))))
+            btn = QPushButton("開啟連結")
+            btn.clicked.connect(lambda _, url=url: QDesktopServices.openUrl(QUrl(url)))
+            self.table.setCellWidget(row, 3, btn)
 
         layout.addWidget(self.table)
         btn_layout = QHBoxLayout()
@@ -143,17 +169,21 @@ class UpdateProductURLDialog(QDialog):
 
     def save_data(self):
         urls = []
+        unit_prices = []
         for row in range(self.table.rowCount()):
             url_item = self.table.item(row, 1)
             urls.append(url_item.text() if url_item is not None else "")
+            price_widget = self.table.cellWidget(row, 2)
+            unit_prices.append(price_widget.text() if price_widget is not None else "")
         self.df_products["url"] = urls
+        # self.df_products["進貨價"] = unit_prices
+        self.df_products["進貨價"] = pd.to_numeric(unit_prices, errors='coerce')
         try:
             self.df_products.to_excel(self.products_file, index=False)
-            QMessageBox.information(self, "提示", "產品 URL 已更新！")
+            QMessageBox.information(self, "提示", "產品 URL 和 進貨價 已更新！")
             self.accept()
         except Exception as e:
-            QMessageBox.critical(self, "錯誤", f"儲存產品 URL 時發生錯誤：{e}")
-
+            QMessageBox.critical(self, "錯誤", f"儲存產品 URL 和 進貨價  時發生錯誤：{e}")
 
 # ===============================
 # 逐筆出貨對話框
@@ -292,6 +322,7 @@ class OrderScraperApp(QWidget):
             self.log("尚未建立 users.xlsx，請先新增使用者。")
         else:
             self.load_users()
+        self.read_sales_data()
 
     def initUI(self, layout):
         self.info_label = QLabel(
@@ -330,7 +361,7 @@ class OrderScraperApp(QWidget):
         self.update_products_btn.clicked.connect(self.update_products_data)
         layout.addWidget(self.update_products_btn)
 
-        self.update_product_url_btn = QPushButton("更新產品URL")
+        self.update_product_url_btn = QPushButton("更新產品URL及進貨價")
         self.update_product_url_btn.clicked.connect(self.update_product_url)
         layout.addWidget(self.update_product_url_btn)
 
@@ -351,9 +382,31 @@ class OrderScraperApp(QWidget):
         self.quit_button.clicked.connect(self.close_playwright)
         layout.addWidget(self.quit_button)
 
-        self.sales_info_label = QLabel("銷售總合：尚無資料", self)
+        self.update_sales_file_btn = QPushButton("更新銷售檔案")
+        self.update_sales_file_btn.clicked.connect(self.update_sales_file)
+        layout.addWidget(self.update_sales_file_btn)
+
+        self.sales_info_label = QLabel("銷售總合：讀取中...", self)
         self.sales_info_label.setAlignment(Qt.AlignLeft)
         layout.addWidget(self.sales_info_label)
+
+    def read_sales_data(self):
+        if not self.current_user_dir:
+            self.log("請先選擇使用者。")
+            return
+
+        sales_file = os.path.join(self.current_user_dir, "sales.xlsx")
+        if not os.path.exists(sales_file):
+            self.log("未找到 sales.xlsx 檔案。")
+            return
+
+        try:
+            df_sales = pd.read_excel(sales_file, sheet_name="銷售總合")
+            total_sales = df_sales.iloc[0]["總收入"]  # 假設 "總收入" 欄位包含銷售總合
+            self.sales_info_label.setText(f"銷售總合：{total_sales}")
+            self.log(f"已讀取銷售總合：{total_sales}")
+        except Exception as e:
+            self.log(f"讀取銷售總合時出錯：{traceback.format_exc()}")
 
     def close_playwright(self):
         """完全關閉 Playwright 並釋放所有資源"""
@@ -407,6 +460,7 @@ class OrderScraperApp(QWidget):
                 os.makedirs(self.current_user_dir)
                 self.log(f"建立新目錄：{self.current_user_dir}")
             self.log(f"已切換到使用者目錄：{self.current_user_dir}")
+            self.read_sales_data()  # Read sales data when switching users
         else:
             self.log("未選擇使用者。")
 
@@ -422,6 +476,13 @@ class OrderScraperApp(QWidget):
         try:
             try:
                 df_orders = pd.read_excel(file_path, sheet_name="合併後資料")
+                try:
+                    df_original = pd.read_excel(file_path, sheet_name="原始資料")
+                    df_orders["Final price"] = df_original["Final price"]
+                except Exception as e:
+                    QMessageBox.critical(self, "錯誤",
+                                         f"無法讀取 '原始資料' 頁面，請確認檔案格式是否正確。\n錯誤訊息: {e}")
+                    return
             except Exception as e:
                 QMessageBox.critical(self, "錯誤",
                                      f"無法讀取 '合併後資料' 頁面，請確認檔案格式是否正確。\n錯誤訊息: {e}")
@@ -441,19 +502,35 @@ class OrderScraperApp(QWidget):
                                      f"無法讀取 '原始資料' 頁面，請確認檔案格式是否正確。\n錯誤訊息: {e}")
                 return
             order_code_list = df_origin["Order Code"].tolist()
-            print(order_code_list)
-
-            self.show_order_confirmation_dialog(df_orders, order_code_list)
+            # print(order_code_list)
+            revenue = round(df_origin["Final price"].sum(),2)
+            print("總營收: ", revenue)
+            self.show_order_confirmation_dialog(df_orders, order_code_list, revenue)
 
         except Exception as e:
             QMessageBox.critical(self, "錯誤", f"出貨流程發生錯誤: {traceback.format_exc()}")
 
 
-    def show_order_confirmation_dialog(self, df_orders, order_code_list):
+    def show_order_confirmation_dialog(self, df_orders, order_code_list, revenue):
         first_order_code = order_code_list[0] if order_code_list else "N/A"
         last_order_code = order_code_list[-1] if order_code_list else "N/A"
         length_of_order_code_list = len(order_code_list)
         user = self.user_combo.currentText()
+
+        # Read the '進貨價' column from products_list.xlsx
+        products_file = os.path.join(self.current_user_dir, "products_list.xlsx")
+        df_products = pd.read_excel(products_file)
+
+        # Create a dictionary to map product names to their prices
+        product_price_map = dict(zip(df_products["Name"], df_products["進貨價"]))
+
+        # Multiply the '進貨價' with the corresponding products in df_orders and sum the results
+        df_orders["進貨價"] = df_orders["Product Name"].apply(lambda name: product_price_map.get(name, 0))
+        df_orders["總合"] = df_orders["進貨價"] * df_orders["Quantity"]
+        # total_sum = df_orders["總合"].sum()
+        total_sum = round(df_orders["總合"].sum(), 2)
+        total_profit = round(revenue - total_sum, 2)
+
 
         message = f"{user}\n訂單從 {first_order_code} 到 {last_order_code} 共 {length_of_order_code_list} 筆"
 
@@ -461,7 +538,7 @@ class OrderScraperApp(QWidget):
         reply = QMessageBox.question(
             self,
             "確認出貨",  # 對話框標題
-            f"{message}，是否開始出貨所有訂單？",
+            f"{message}\n訂單盈收共{revenue}, 總支出{total_sum}美元\n獲利{total_profit}，是否開始出貨所有訂單？",
             QMessageBox.Yes | QMessageBox.No
         )
 
@@ -841,6 +918,7 @@ class OrderScraperApp(QWidget):
         except Exception as e:
             self.log(f"抓取訂單資料時發生錯誤: {traceback.format_exc()}")
 
+    '''
     def update_sales_file(self, df):
         try:
             today = datetime.now().strftime("%Y-%m-%d")
@@ -871,6 +949,31 @@ class OrderScraperApp(QWidget):
 
         except Exception as e:
             self.log(f"更新銷售檔案時出錯：{traceback.format_exc()}")
+    '''
+
+    def update_sales_file(self):
+        try:
+            today = datetime.now().strftime("%Y-%m-%d")
+            total_revenue = 0
+            sales_data = []
+
+            for file_name in os.listdir(self.current_user_dir):
+                if file_name.startswith("goshop_orders") and file_name.endswith(".xlsx"):
+                    file_path = os.path.join(self.current_user_dir, file_name)
+                    df = pd.read_excel(file_path, sheet_name="原始資料")
+                    revenue = df["Final price"].sum()
+                    total_revenue += revenue
+                    sales_data.append({"檔案名": file_name, "revenue": revenue})
+            total_revenue = round(total_revenue, 2)
+            sales_df = pd.DataFrame(sales_data)
+            sales_file = os.path.join(self.current_user_dir, "sales.xlsx")
+            # sales_df.to_excel(sales_file,sheet_name="銷售記錄", index=False)
+            with pd.ExcelWriter(sales_file, engine="openpyxl", mode="a", if_sheet_exists="replace") as writer:
+                sales_df.to_excel(writer, sheet_name="銷售記錄", index=False)
+                pd.DataFrame([{"總收入": total_revenue}]).to_excel(writer, sheet_name="銷售總合", index=False)
+            QMessageBox.information(self, "更新完成", f"銷售資料已更新，總收入：{total_revenue}")
+        except Exception as e:
+            self.log(f"更新銷售資料時出錯：{traceback.format_exc()}")
 
     def update_sales_file_split(self, df_pending, df_rest):
         try:
@@ -1025,14 +1128,28 @@ class OrderScraperApp(QWidget):
             return
 
         try:
+            '''
             df_products = pd.read_excel(products_file)
             if df_products.shape[1] < 10 or "url" not in df_products.columns:
                 df_products["url"] = ""
                 cols = ["#", "Thumbnail Image", "Name", "Category", "Current Qty",
-                        "Base Price", "Published", "Examine Status", "Options", "url"]
+                        "Base Price", "Published", "Examine Status", "Options", "url", "Unit Price"]
                 df_products = df_products[cols]
                 df_products.to_excel(products_file, index=False)
                 self.log(f"更新產品檔案欄位，補上 'url' 欄。")
+            self.update_orders_url()
+            '''
+            print("AAAAA")
+            df_products = pd.read_excel(products_file)
+            if df_products.shape[1] < 11 or "url" not in df_products.columns or "Unit Price" not in df_products.columns:
+                df_products["url"] = ""
+                if "進貨價" not in df_products.columns:
+                    df_products["進貨價"] = 0.0
+                cols = ["#", "Thumbnail Image", "Name", "Category", "Current Qty",
+                        "Base Price", "Published", "Examine Status", "Options", "url", "進貨價"]
+                df_products = df_products[cols]
+                df_products.to_excel(products_file, index=False)
+                self.log(f"更新產品檔案欄位，補上 'url' 和 '進貨價' 欄。")
             self.update_orders_url()
         except Exception as e:
             self.log(f"更新產品資料時出錯：{traceback.format_exc()}")
@@ -1052,6 +1169,7 @@ class OrderScraperApp(QWidget):
         若相符則於該筆資料新增一個「Product URL」欄，填入產品目錄中對應的 url 資料，
         更新後存回原訂單檔（以覆蓋「合併後資料」工作表）。
         """
+
         if not self.current_user_dir:
             self.log("請先選擇使用者。")
             return
@@ -1145,11 +1263,16 @@ class OrderScraperApp(QWidget):
                 "#", "Thumbnail Image", "Name", "Category", "Current Qty",
                 "Base Price", "Published", "Examine Status", "Options"
             ])
-            df_products["url"] = ""
+            df_products["進貨價"] = 0.0
+            # df_products["url"] = ""
+
+            df_products["url"] = df_products["Name"].str.lower().str.replace(" ", "-").apply(
+                lambda x: f"https://baibaoshop.com/product/{x}")
+
             products_file = os.path.join(self.current_user_dir, "products_list.xlsx")
             df_products.to_excel(products_file, index=False)
             self.log(f"產品資料已存成 Excel 檔案：{products_file}")
-            print("Samuel")
+
             QMessageBox.information(self, "提示", "產品資料已存成 Excel 檔案,退出視窗。", QMessageBox.Ok)
         except Exception as e:
             self.log(f"抓取產品資料時出錯：{traceback.format_exc()}")
