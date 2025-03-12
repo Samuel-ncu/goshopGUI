@@ -459,7 +459,7 @@ class OrderScraperApp(QWidget):
 
     def scrape_data(self):
         # 此功能抓取訂單資料，並根據 lastorder.txt 決定是否分頁處理
-        user_prefix = self.user_combo.currentText()
+        # user_prefix = self.user_combo.currentText()
         products_file = os.path.join(self.base_dir, "products_list.xlsx")
         if not os.path.exists(products_file):
             QMessageBox.information(self, "提示", "請先建立產品目錄 (products_list.xlsx)", QMessageBox.Ok)

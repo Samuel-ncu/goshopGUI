@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
+# import re
 import random
 import sys
 import os
 import time
 import traceback
-from tkinter.filedialog import dialogstates
+# from tkinter.filedialog import dialogstates
 
 import pandas as pd
 from datetime import datetime
@@ -15,8 +15,8 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QPushButton, QTextEdit, QLabel, QMessageBox, QDialog,
     QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QTableWidget, QTableWidgetItem, QHeaderView,QScrollArea
 )
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from numpy.ma.core import minimum
+# from PyQt5.QtCore import Qt, QThread, pyqtSignal
+# from numpy.ma.core import minimum
 from playwright.sync_api import sync_playwright
 from PyQt5.QtGui import QClipboard
 from PyQt5.QtCore import Qt, QUrl
@@ -562,6 +562,8 @@ class OrderScraperApp(QWidget):
             self.page = context.new_page()
 
             self.page.goto("https://baibaoshop.com/")
+            self.page.click("body > div.wd-page-wrapper.website-wrapper > header > div > div.whb-row.whb-general-header.whb-not-sticky-row.whb-with-bg.whb-border-fullwidth.whb-color-light.whb-flex-equal-sides > div > div > div.whb-column.whb-col-right.whb-visible-lg > div.wd-header-my-account.wd-tools-element.wd-event-hover.wd-design-1.wd-account-style-icon.whb-vssfpylqqax9pvkfnxoz > a > span.wd-tools-icon")
+            self.page.fill('input[name="username"]', user)
             self.page.mouse.move(random.randint(0, 1000), random.randint(0, 1000))
             time.sleep(random.uniform(1, 3))
             self.page.click(
@@ -677,11 +679,15 @@ class OrderScraperApp(QWidget):
             self.log("瀏覽器已經啟動。")
             return
         try:
+            user = self.user_combo.currentText()
+            # QMessageBox.information(self, "提示", f"正在為使用者 {user} 啟動瀏覽器，請稍候...", QMessageBox.Ok)
             self.playwright = sync_playwright().start()
             self.browser = self.playwright.chromium.launch(channel="msedge", headless=False)
             context = self.browser.new_context()
             self.page = context.new_page()
             self.page.goto("https://goshophsn.com/users/login")
+            self.page.fill('input[type="email"]', user)
+            #QMessageBox.information(self, "提示", f"請以 {user} 帳號登入", QMessageBox.Ok)
 
             self.log(
                 "請在新開啟的瀏覽器中手動登入 Goshophsn。\n登入完成後，返回此視窗並點擊【抓取訂單】、【更新產品資料】或【更新產品URL】。")
@@ -784,14 +790,14 @@ class OrderScraperApp(QWidget):
                     df_pending.to_excel(writer, sheet_name="原始資料", index=False)
                     split_df.to_excel(writer, sheet_name="拆分後資料", index=False)
                     merged_df.to_excel(writer, sheet_name="合併後資料", index=False)
-                msg_text = f"訂單資料已存成 Excel 檔案：{file_path}\n"
+                # msg_text = f"訂單資料已存成 Excel 檔案：{file_path}\n"
                 self.log(f"訂單資料已存成 Excel 檔案：{file_path}")
                 if not df_pending.empty:
                     first_order_code = str(df_pending["Order Code"].iloc[0]).strip()
                     with open(lastorder_file, "w", encoding="utf-8") as f:
                         f.write(first_order_code)
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
-                    msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
+                    # msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
                     self.update_sales_file(df_pending)
             else:
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
@@ -812,7 +818,7 @@ class OrderScraperApp(QWidget):
                     first_order_code = str(df_pending["Order Code"].iloc[0]).strip()
                     with open(lastorder_file, "w", encoding="utf-8") as f:
                         f.write(first_order_code)
-                    msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
+                    # msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
                     total_amount_pending, total_service_charge_pending, total_final_price_pending, total_amount_rest, total_service_charge_rest, total_final_price_rest=self.update_sales_file_split(df_pending, df_rest)
         except Exception as e:
