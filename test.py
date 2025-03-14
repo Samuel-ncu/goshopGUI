@@ -2,7 +2,12 @@ from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel,
                              QScrollArea, QWidget, QApplication, QHBoxLayout)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QClipboard
-
+import os
+import gspread
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 class ShippingDialog(QDialog):
     def __init__(self, message, order_details, parent=None):

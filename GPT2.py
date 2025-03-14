@@ -22,7 +22,12 @@ from PyQt5.QtGui import QClipboard
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtGui import QColor, QFont,  QDesktopServices,  QDoubleValidator
 # from PyQt5.QtWidgets import QDesktopServices
-
+import os
+import gspread
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 class DialogWindow(QWidget):
     def __init__(self):
@@ -321,8 +326,94 @@ class OrderScraperApp(QWidget):
             self.disable_buttons()
             self.log("尚未建立 users.xlsx，請先新增使用者。")
         else:
-            self.load_users()
+            self.df_users = self.load_users()
+
+        # Check Google Sheets access
+        self.check_google_sheets_access(self.df_users)
         self.read_sales_data()
+
+    def check_google_sheets_access(self, df_users):
+        msg=""
+        membership = True
+        drive_service = self.get_drive_service()
+        # 1. 檢查父目錄 Goshophsn 是否存在
+        parent_query = (
+            "mimeType='application/vnd.google-apps.folder' "
+            "and name='APPDATA-GoshopHSN' "
+            "and 'root' in parents"
+        )
+        parent_result = drive_service.files().list(
+            q=parent_query,
+            fields="files(id, name)"
+        ).execute()
+        parent_folders = parent_result.get('files', [])
+        print("parent_folders ",parent_folders )
+
+        if not parent_folders:
+            print("父目錄 Goshophsn 不存在")
+        else:
+            print("父目錄 Goshophsn 存在")
+
+        for folder_name in df_users['user']:
+            # folder_name = self.df_users['user'][1]
+            sheet_name = "lastorder.txt"
+            # folder_name="Goshophsn/"+folder_name
+            # 取得父目錄 ID
+            parent_id = parent_folders[0]['id']
+            print("parent_id ",parent_id)
+
+            # 2. 檢查子目錄 folder_name 是否存在
+            child_query = (
+                f"mimeType='application/vnd.google-apps.folder' "
+                f"and name='{folder_name}' "
+                f"and '{parent_id}' in parents"
+            )
+            child_result = drive_service.files().list(
+                q=child_query,
+                fields="files(id, name)"
+            ).execute()
+            child_folders = child_result.get('files', [])
+            if not child_folders:
+                msg += f"{folder_name}不存在\n"
+                print(f"子目錄{folder_name}不存在")
+                membership = False
+            else:
+                print(f"父目錄{folder_name} 存在")
+            if not membership:
+                QMessageBox.information(self, "錯誤", msg+"請洽管理人員")
+                exit()
+
+    def authenticate(self):
+        SCOPES = [
+            "https://www.googleapis.com/auth/drive",
+            "https://www.googleapis.com/auth/spreadsheets"
+        ]
+        creds = None
+        if os.path.exists("token.json"):
+            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if not creds or not creds.valid:
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            creds = flow.run_local_server(port=8080)
+            with open("token.json", "w") as token:
+                token.write(creds.to_json())
+        return creds
+
+    def get_drive_service(self):
+        creds = self.authenticate()
+        return build("drive", "v3", credentials=creds)
+
+    # 取得 Google Sheets 服務
+    def get_gspread_client(self):
+        creds = self.authenticate()
+        return gspread.authorize(creds)
+
+    def get_folder_id(self,drive_service, folder_name):
+        query = f"name = '{folder_name}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
+        response = drive_service.files().list(q=query, fields="files(id, name)").execute()
+        folders = response.get("files", [])
+        return folders[0]["id"] if folders else None
+
+
 
     def initUI(self, layout):
         self.info_label = QLabel(
@@ -447,6 +538,7 @@ class OrderScraperApp(QWidget):
                 for user in df_users["user"]:
                     self.user_combo.addItem(user)
                 self.log("載入使用者資料成功。")
+                return df_users
             except Exception as e:
                 self.log(f"載入 users.xlsx 時出錯：{e}")
         else:
@@ -667,10 +759,12 @@ class OrderScraperApp(QWidget):
                     QMessageBox.information(self, "提示", "此使用者已存在。", QMessageBox.Ok)
                 else:
                     df_users = pd.concat([df_users, pd.DataFrame({"user": [new_user]})], ignore_index=True)
+                    self.check_google_sheets_access(df_users)
                     df_users.to_excel(self.users_file, index=False)
                     self.log(f"使用者 {new_user} 已新增到 {self.users_file}。")
                     self.user_combo.addItem(new_user)
                     self.change_base_dir()
+
             else:
                 QMessageBox.information(self, "提示", "請輸入使用者名稱。", QMessageBox.Ok)
 
@@ -1316,6 +1410,7 @@ class OrderScraperApp(QWidget):
 
 
 if __name__ == "__main__":
+
     app = QApplication(sys.argv)  # 確保 QApplication 正確初始化
     window = OrderScraperApp()
     window.show()
