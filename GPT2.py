@@ -595,6 +595,7 @@ class OrderScraperApp(QWidget):
                 self.log(f"正在出貨: {idx + 1}. {product_name} - {attribute} - 數量: {quantity}")
                 msg_box = QMessageBox(self)
                 msg_box.setWindowTitle("出貨中")
+                msg_box.setWindowFlags(msg_box.windowFlags() | Qt.WindowStaysOnTopHint)
                 msg_box.setText(f"第 {idx + 1}筆.共{len(df_orders)}筆 總計{total_quantity}件中第{sub_total}件\n\n產品: {product_name}\n規格: {attribute}\n數量: {quantity}")
                 msg_box.addButton("下一筆", QMessageBox.AcceptRole)
                 exit_button = msg_box.addButton("離開", QMessageBox.RejectRole)
@@ -798,7 +799,7 @@ class OrderScraperApp(QWidget):
                         f.write(first_order_code)
                     self.log(f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}")
                     # msg_text += f"已建立 {lastorder_file}，內容為第一筆訂單的 Order Code：{first_order_code}"
-                    self.update_sales_file(df_pending)
+                    self.update_sales_file()
             else:
                 df_pending = pd.DataFrame(pending_orders, columns=columns)
                 df_rest = pd.DataFrame(rest_orders, columns=columns)
