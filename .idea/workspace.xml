@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 13st Commit&#10;Rev 1.1">
-      <change afterPath="$PROJECT_DIR$/credentials.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GPT2.py" beforeDir="false" afterPath="$PROJECT_DIR$/GPT2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/users.xlsx" afterDir="false" />
-    </list>
+    <list default="true" id="80a49d2a-4032-415e-8ff9-1a711e19a8bb" name="Changes" comment="Goshop 13st Commit&#10;Rev 1.1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,17 +40,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.GPT2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/samuel.liu/PyCharm/goshopGUI&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.GPT2.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "google",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/samuel.liu/PyCharm/goshopGUI",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\samuel.liu\PyCharm\goshopGUI" />
@@ -157,7 +151,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="origin/google" />
                       </list>
                     </value>
                   </entry>
@@ -180,21 +174,5 @@
     <MESSAGE value="Goshop 13st Commit&#10;Rev 1.0" />
     <MESSAGE value="Goshop 13st Commit&#10;Rev 1.1" />
     <option name="LAST_COMMIT_MESSAGE" value="Goshop 13st Commit&#10;Rev 1.1" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/GPT2.py</url>
-          <line>558</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/GPT2.py</url>
-          <line>1067</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
